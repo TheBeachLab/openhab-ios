@@ -9,6 +9,7 @@
 //
 // SPDX-License-Identifier: EPL-2.0
 
+import FirebaseCore
 import FirebaseCrashlytics
 import OpenHABCore
 import SwiftUI
@@ -26,6 +27,7 @@ class CrashReportService: ObservableObject {
     // MARK: - Crash Report
 
     private func setupCrashReportCheck() {
+        guard FirebaseApp.app() != nil else { return }
         Task { @MainActor in
             if Crashlytics.crashlytics().didCrashDuringPreviousExecution(), !(await Preferences.shared.sendCrashReports) {
                 crashReportAlert = true
@@ -34,6 +36,7 @@ class CrashReportService: ObservableObject {
     }
 
     func enableCrashReporting() {
+        guard FirebaseApp.app() != nil else { return }
         Task {
             await Preferences.shared.setSendCrashReports(true)
             Crashlytics.crashlytics().sendUnsentReports()
@@ -41,6 +44,7 @@ class CrashReportService: ObservableObject {
     }
 
     func deleteCrashReports() {
+        guard FirebaseApp.app() != nil else { return }
         Crashlytics.crashlytics().deleteUnsentReports()
     }
 }

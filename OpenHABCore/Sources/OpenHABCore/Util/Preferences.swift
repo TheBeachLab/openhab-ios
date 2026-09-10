@@ -50,7 +50,7 @@ public struct UserDefault<T: Sendable> {
         self.key = key
         self.defaultValue = defaultValue
         self.isHomeProperty = isHomeProperty
-        let d = UserDefaults(suiteName: "group.org.openhab.app")!
+        let d = UserDefaults(suiteName: "group.org.beachlab.openhab")!
         self.defaults = d
         let currentValue = (d.object(forKey: key) as? T) ?? defaultValue
         subject = CurrentValueSubject(currentValue)
@@ -100,7 +100,7 @@ public struct UserDefaultObject<T: Codable & Sendable> {
         self.key = key
         self.defaultValue = defaultValue
         self.isHomeProperty = isHomeProperty
-        let d = UserDefaults(suiteName: "group.org.openhab.app")!
+        let d = UserDefaults(suiteName: "group.org.beachlab.openhab")!
         self.defaults = d
         let currentValue: T
         if let data = d.object(forKey: key) as? Data,
@@ -396,7 +396,7 @@ public actor Preferences {
     private static let defaultHomeId = UUID()
 
     // Used by migration methods to read old keys directly from the suite.
-    private let sharedDefaults = UserDefaults(suiteName: "group.org.openhab.app")!
+    private let sharedDefaults = UserDefaults(suiteName: "group.org.beachlab.openhab")!
 
     @UserDefaultObject("currentHomePreferences", defaultValue: HomePreferences(id: defaultHomeId))
     private var _currentHomePreferences: HomePreferences

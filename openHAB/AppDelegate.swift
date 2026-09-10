@@ -59,7 +59,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         // Firebase must be configured before the storyboard loads its root view controller,
         // because OpenHABRootViewController.viewDidLoad calls Crashlytics before the deferred
-        // task would have had a chance to run. Calling Crashlytics before FirebaseApp.configure()
+        // task would have had a chance to run. Calling Crashlytics before FirebaseApp.configure(options: options)
         // silences crash detection for the entire session.
         setupFirebase()
 
@@ -122,8 +122,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     private func setupFirebase() {
+        // Only initialize Firebase when its configuration belongs to this app.
+        guard let path = Bundle.main.path(forResource: "GoogleService-Info", ofType: "plist"),
+              let options = FirebaseOptions(contentsOfFile: path),
+              options.bundleID == Bundle.main.bundleIdentifier else {
+            Logger.appDelegate.info("Firebase is not configured for this app identity")
+            return
+        }
         // init Firebase crash reporting
-        FirebaseApp.configure()
+        FirebaseApp.configure(options: options)
         FirebaseApp.app()?.isDataCollectionDefaultEnabled = false
         crashlyticsTask = Task {
             for await value in await Preferences.shared.sendCrashReportsStream {

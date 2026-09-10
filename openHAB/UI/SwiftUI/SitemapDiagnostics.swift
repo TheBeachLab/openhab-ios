@@ -241,7 +241,7 @@ enum SitemapDiagnostics {
     private static let processStartedAt = ProcessInfo.processInfo.systemUptime
 
     static var isEnabled: Bool {
-        guard let data = UserDefaults(suiteName: "group.org.openhab.app")?.data(forKey: "applicationPreferences"),
+        guard let data = UserDefaults(suiteName: "group.org.beachlab.openhab")?.data(forKey: "applicationPreferences"),
               let prefs = try? JSONDecoder().decode(ApplicationPreferences.self, from: data) else {
             return false
         }
